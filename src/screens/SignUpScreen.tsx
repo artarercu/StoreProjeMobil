@@ -42,12 +42,17 @@ const SignUpScreen: FC<Props> = (props) => {
                     <Button
                         onPress={() => {
                             API_Register({ username: username, email: email, password: password }).then(() => {
-                                Alert.alert("İşlem başarılı")
+                                Alert.alert("İşlem başarılı", "Hesabınız başarıyla oluşturulmuştur.")
                                 props.navigation.goBack();
-
                             }).catch((err) => {
-                                Alert.alert("Hata Oluştu", err.title);
-
+                                let firstError = null;
+                                for (const key in err.errors) {
+                                    if (err.errors.hasOwnProperty(key)) {
+                                        firstError = err.errors[key][0];
+                                        break;
+                                    }
+                                }
+                                Alert.alert("Hata Oluştu", firstError);
                             })
                         }}
                         style={{ marginTop: (10) }}
